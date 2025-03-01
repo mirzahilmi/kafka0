@@ -1,3 +1,4 @@
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -7,11 +8,11 @@ public class Main {
     int port = 9092;
     try (
         ServerSocket serverSocket = new ServerSocket(port);
-        Socket clientSocket = serverSocket.accept();) {
-      // Since the tester restarts your program quite often, setting SO_REUSEADDR
-      // ensures that we don't run into 'Address already in use' errors
+        Socket clientSocket = serverSocket.accept();
+        DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream());) {
       serverSocket.setReuseAddress(true);
-      // Wait for connection from client.
+      out.writeInt(0);
+      out.writeInt(7);
     } catch (IOException e) {
       System.out.println("IOException: " + e.getMessage());
     }
