@@ -9,31 +9,27 @@ import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
-final class Server implements AutoCloseable, Runnable {
-    static final String DEFAULT_HOST = "localhost";
-    static final int DEFAULT_PORT = 9092;
+public final class Server implements AutoCloseable, Runnable {
+    public static final String DEFAULT_HOST = "localhost";
+    public static final int DEFAULT_PORT = 9092;
 
-    static final int MESSAGE_SIZE = 4;
-    static final int REQUEST_API_KEY_SIZE = 2;
-    static final int REQUEST_API_VERSION_SIZE = 2;
-    static final int CORRELATION_ID_SIZE = 4;
-    static final int ERROR_CODE_SIZE = 2;
+    public static final int MESSAGE_SIZE = 4;
+    public static final int REQUEST_API_KEY_SIZE = 2;
+    public static final int REQUEST_API_VERSION_SIZE = 2;
+    public static final int CORRELATION_ID_SIZE = 4;
+    public static final int ERROR_CODE_SIZE = 2;
 
     private final ServerSocket server;
 
-    Server() {
+    public Server(int port) {
         try {
-            this.server = new ServerSocket(DEFAULT_PORT);
+            this.server = new ServerSocket(port);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    Server(final ServerSocket server) {
-        this.server = server;
-    }
-
-    void listen() {
+    public void listen() {
         System.out.println("server listening...");
         try (
                 Socket socket = server.accept();

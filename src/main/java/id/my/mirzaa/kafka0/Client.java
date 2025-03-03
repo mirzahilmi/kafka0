@@ -24,13 +24,14 @@ final class Client {
                 DataOutputStream out = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()))) {
             out.writeInt(35);
             out.writeShort(18);
-            out.writeShort(26442);
-            out.writeInt(1333056139);
+            out.writeShort(-22277);
+            out.writeInt(522627758);
             out.flush();
 
             int responseSize = Server.MESSAGE_SIZE + Server.CORRELATION_ID_SIZE + Server.ERROR_CODE_SIZE;
             byte[] raw = new byte[responseSize];
             in.read(raw, 0, responseSize);
+            ByteHelper.print(raw, "received");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
