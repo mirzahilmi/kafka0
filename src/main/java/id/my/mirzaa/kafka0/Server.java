@@ -32,28 +32,30 @@ public final class Server implements AutoCloseable, Runnable {
     public void listen() {
         System.out.println("server listening...");
         try (
-                Socket socket = server.accept();
-                BufferedInputStream in = new BufferedInputStream(socket.getInputStream());
-                DataOutputStream out = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()))) {
+            Socket socket = server.accept();
+            BufferedInputStream in = new BufferedInputStream(socket.getInputStream());
+            DataOutputStream out =
+                new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()))) {
 
-            int requestSize = MESSAGE_SIZE + REQUEST_API_KEY_SIZE + REQUEST_API_VERSION_SIZE + CORRELATION_ID_SIZE;
+            int requestSize = MESSAGE_SIZE + REQUEST_API_KEY_SIZE + REQUEST_API_VERSION_SIZE
+                + CORRELATION_ID_SIZE;
             byte[] raw = new byte[requestSize];
             in.read(raw, 0, requestSize);
 
             byte[] messageSize = Arrays.copyOfRange(raw, 0, MESSAGE_SIZE);
             byte[] requestApiKey = Arrays.copyOfRange(raw, MESSAGE_SIZE,
-                    MESSAGE_SIZE +
-                            REQUEST_API_KEY_SIZE);
+                MESSAGE_SIZE +
+                    REQUEST_API_KEY_SIZE);
             byte[] requestApiVersion = Arrays.copyOfRange(raw, MESSAGE_SIZE +
-                    REQUEST_API_KEY_SIZE,
-                    MESSAGE_SIZE + REQUEST_API_KEY_SIZE
-                            + REQUEST_API_VERSION_SIZE);
+                REQUEST_API_KEY_SIZE,
+                MESSAGE_SIZE + REQUEST_API_KEY_SIZE
+                    + REQUEST_API_VERSION_SIZE);
             byte[] correlationId = Arrays.copyOfRange(raw, MESSAGE_SIZE +
-                    REQUEST_API_KEY_SIZE
-                    + REQUEST_API_KEY_SIZE,
-                    MESSAGE_SIZE + REQUEST_API_KEY_SIZE
-                            + REQUEST_API_VERSION_SIZE
-                            + CORRELATION_ID_SIZE);
+                REQUEST_API_KEY_SIZE
+                + REQUEST_API_KEY_SIZE,
+                MESSAGE_SIZE + REQUEST_API_KEY_SIZE
+                    + REQUEST_API_VERSION_SIZE
+                    + CORRELATION_ID_SIZE);
 
             int apiVersion = ByteBuffer.wrap(requestApiVersion).getShort();
             int errorCode = apiVersion >= 0 && apiVersion <= 4 ? 0 : 35;
