@@ -1,0 +1,9 @@
+Configuration:
+  Appenders:
+    Console:
+      name: "CONSOLE"
+  Loggers:
+    Root:
+      level: "DEBUG"
+      AppenderRef:
+        ref: "CONSOLE"

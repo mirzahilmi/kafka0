@@ -9,7 +9,12 @@ import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public final class Server implements AutoCloseable, Runnable {
+    private static final Logger logger = LogManager.getLogger(Server.class);
+
     public static final String DEFAULT_HOST = "localhost";
     public static final int DEFAULT_PORT = 9092;
 
@@ -30,7 +35,7 @@ public final class Server implements AutoCloseable, Runnable {
     }
 
     public void listen() {
-        System.out.println("server listening...");
+        logger.info("server listening: host=[{}] port=[{}]", DEFAULT_HOST, DEFAULT_PORT);
         try (
             Socket socket = server.accept();
             BufferedInputStream in = new BufferedInputStream(socket.getInputStream());

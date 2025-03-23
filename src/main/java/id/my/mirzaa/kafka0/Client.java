@@ -6,13 +6,18 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 final class Client {
+    private static final Logger logger = LogManager.getLogger(Client.class);
+
     private final Socket socket;
 
     Client() {
         try {
             this.socket = new Socket(Server.DEFAULT_HOST, Server.DEFAULT_PORT);
-            System.out.println("socket established");
+            logger.info("client connected: host=[{}] port=[{}]", Server.DEFAULT_HOST, Server.DEFAULT_PORT);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -33,7 +38,8 @@ final class Client {
                 Server.MESSAGE_SIZE + Server.CORRELATION_ID_SIZE + Server.ERROR_CODE_SIZE;
             byte[] raw = new byte[responseSize];
             in.read(raw, 0, responseSize);
-            ByteHelper.print(raw, "received");
+
+            logger.debug("client received: bytes=[{}]", ByteHelper.toHexString(raw));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
